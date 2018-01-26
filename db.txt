@@ -1,0 +1,72 @@
+var sql = 'SELECT * FROM '+db.table('user')+' WHERE username = "'+username+'" and password = "'+password+'" limit 1';
+db.fetch(sql, function(result){
+    var response = {};
+    if(result.length > 0){
+        //登录成功
+        response.result = 'success';
+        response.code = '0001';
+        // response.data = result;
+    }else{
+        //账号密码错误或账号不存在
+        response.result = 'defeat';
+        response.code = '0011';
+        response.reason = '账号密码错误或账号不存在';
+    }
+    res.end(JSON.stringify(response));
+});
+
+// //增
+// var data = {
+//     'username': username,
+//     'password': password,
+//     'dateline': common.time
+// };
+// db.insert('user', data, function(result){
+//     var response = {};
+//     if(result){
+//         response.result = 'success';
+//         response.code = '0001';
+//         // response.data = result;
+//     }else{
+//         response.result = 'defeat';
+//         response.code = '0011';
+//         response.reason = '添加失败';
+//     }
+//     res.end(JSON.stringify(response));
+// });
+
+//改
+// var data = {
+//     'username': username,
+//     'password': password
+// };
+// db.update('user', data, 'id = 2', function(result){
+//     var response = {};
+//     console.log(result);
+//     if(result || result === 0){
+//         response.result = 'success';
+//         response.code = '0001';
+//         // response.data = result;
+//     }else{
+//         response.result = 'defeat';
+//         response.code = '0011';
+//         response.reason = '修改失败';
+//     }
+//     res.end(JSON.stringify(response));
+// });
+
+//删
+// db.delete('user', 'id = 2', function(result){
+//     var response = {};
+//     console.log(result);
+//     if(result || result === 0){
+//         response.result = 'success';
+//         response.code = '0001';
+//         // response.data = result;
+//     }else{
+//         response.result = 'defeat';
+//         response.code = '0011';
+//         response.reason = '删除失败';
+//     }
+//     res.end(JSON.stringify(response));
+// });

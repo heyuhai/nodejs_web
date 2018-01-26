@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{title}} {%endblock%}
+
+{% block content %}
+<p class="fs20">管理员编辑</p>
+{% include 'menu.html' %}
+<form id="formid" class="form-inline" method="post">
+<input name="id" type="hidden" value="{{ id|default('') }}" />
+<table class="table">
+    <tr>
+        <td width="100">账号</td>
+        <td><input class="form-control" type="text" id="username" name="username" value="{{ info.username|default('') }}" /></td>
+    </tr>
+    <tr>
+        <td>密码</td>
+        <td><input class="form-control" type="password" id="password" name="password" value="" />&nbsp;&nbsp;<span class="red">*修改时为空则为不更新密码</span></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input class="w100 btn btn-primary addbtn" type="button" value="提交" /></td>
+    </tr>
+</table>
+</form>
+<script type="text/javascript">
+    $(function(){
+        //ajax提交
+        $('.addbtn').click(function(){
+            $("#formid").ajaxSubmit({
+                dataType:'json',
+                url:'/admin/user_add',
+                beforeSubmit: function(){
+                    var username = $.trim($('#username').val());
+                    if(username == ''){
+                        alert('账号不能为空');
+                        return false;
+                    }
+                    {% if id|default('') == '' %}
+                    var password = $.trim($('#password').val());
+                    if(password == ''){
+                        alert('密码不能为空');
+                        return false;
+                    }
+                    {% endif %}
+                },
+                success: function(res) {
+                    if(res.code == '0001'){
+                        alert('操作成功！');
+                        window.location.href = '/admin/user_list';
+                    }else{
+                        alert(res.reason);
+                    }
+                },
+                error: function(a, b){
+                    alert('服务器错误');
+                }
+            });
+        })
+    });
+</script>
+{% endblock %}

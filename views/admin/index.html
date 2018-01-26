@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/bootstrap3/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/bootstrap3/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.form.min.js"></script>
+    <script src="/js/layer/layer.js"></script>
+    <script src="/js/common.js"></script>
+    <title>{{ title }} -- nodejs.express</title>
+</head>
+<body>
+    <div class="w300 auto" style="margin-top: 100px;">
+        <div class="tc fs20" style="font-weight: bold;">管理后台</div>
+        <form id="formid" method="post" class="mt10 tc">
+            <div class="form-group">
+                <input type="text" class="form-control" name="username" id="username" placeholder="账号" />
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password" id="password" placeholder="密码">
+            </div>
+            <input class="btn btn-primary auto addbtn" type="button" value="登录" />
+        </form>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            //ajax提交
+            $('.addbtn').click(function(){
+                $("#formid").ajaxSubmit({
+                    dataType:'json',
+                    url:'/admin/login',
+                    beforeSubmit: function(){
+                        var username = $.trim($('#username').val());
+                        if(username == ''){
+                            alert('账号不能为空');
+                            return false;
+                        }
+                        var password = $.trim($('#password').val());
+                        if(password == ''){
+                            alert('密码不能为空');
+                            return false;
+                        }
+                    },
+                    success: function(res) {
+                        if(res.code == '0001'){
+                            alert('登录成功！');
+                            window.location.href = '/admin/main';
+                        }else{
+                            alert(res.reason);
+                        }
+                    },
+                    error: function(a, b){
+                        alert('服务器错误');
+                    }
+                });
+            })
+        });
+    </script>
+</body>
+</html>

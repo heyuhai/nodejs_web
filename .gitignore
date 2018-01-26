@@ -1,0 +1,13 @@
+.DS_Store
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+node_modules
+coverage
+.idea
+dist
+.nyc_output
+package-lock.json

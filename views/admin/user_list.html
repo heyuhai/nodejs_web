@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{title}} {%endblock%}
+
+{% block content %}
+<p class="fs20">管理员列表</p>
+{% include 'menu.html' %}
+<a class="btn btn-default mb10" href="/admin/user_add">添加</a>
+<form id="formid" method="post">
+<table class="table table-hover">
+    <tr>
+        <td width="50"></td>
+        <td width="50">ID</td>
+        <td width="200">账号</td>
+        <td width="200">添加时间</td>
+        <td>操作</td>
+    </tr>
+    {% for key, val in list %}
+    <tr>
+        <td><input class="checkbox" type="checkbox" value="{{ val.id }}" /></td>
+        <td>{{ val.id }}</td>
+        <td>{{ val.username }}</td>
+        <td>{{ val.dateline|date('Y-m-d H:i', -480, 'CCT') }}</td>
+        <td><a href="/admin/user_add?id={{ val.id }}">编辑</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<div style="padding: 8px;" class="clear">
+    <div class="fl">
+        <input type="hidden" id="ids" name="ids" value="" />
+        <label for="checkall"><input onclick="javascript:Common.checkall(this);" id="checkall" type="checkbox" value="" />&nbsp;全选</label>
+        <button class="btn btn-primary delbtn">删除?</button>
+    </div>
+    <div class="fr pager">
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    $(function(){
+        //ajax提交
+        $('.delbtn').click(function(){
+            Common.loadingShow();
+
+            var ids = '';
+            $.each($(".checkbox:checked"), function(i, v){
+                ids += $(v).val()+',';
+            });
+            if(ids != '') ids = ids.substring(0, ids.length-1);
+            $("#ids").val(ids);
+
+            $("#formid").ajaxSubmit({
+                dataType:'json',
+                url:'/admin/user_del',
+                beforeSubmit: function(){
+                    var cl = $(".checkbox:checked").length;
+                    if(cl <= 0){
+                        alert('请选择操作数据');
+                        Common.loadingHide();
+                        return false;
+                    }
+                },
+                success: function(res) {
+                    if(res.code == '0001'){
+                        alert('删除成功！');
+                        window.location.href = '/admin/user_list';
+                    }else{
+                        alert(res.reason);
+                    }
+                    Common.loadingHide();
+                },
+                error: function(a, b){
+                    alert('服务器错误');
+                    Common.loadingHide();
+                }
+            });
+            return false;
+        })
+    });
+</script>
+{% endblock %}
