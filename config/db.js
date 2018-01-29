@@ -10,6 +10,9 @@ var db_database = config.db_database;
 var db_prefix = config.db_prefix;
 
 function db() {
+
+    this.connectDb = null;
+
     //数据库连接
     this.connectServer = function(){
         var connection = mysql.createConnection({
@@ -19,6 +22,10 @@ function db() {
             port: db_port,
             database: db_database
         });
+        if (this.connectDb) {
+            return this.connectDb;
+        }
+        this.connectDb = connection;
         return connection;
     };
     //表

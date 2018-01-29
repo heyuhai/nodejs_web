@@ -20,6 +20,7 @@ router.post('/login', function(req, res, next) {
 
     //判断账号密码是否正确
     var sql = 'SELECT * FROM '+db.table('user')+' WHERE username = "'+username+'" and password = "'+password+'" limit 1';
+
     db.fetch(sql, function(result){
         var response = {};
         if(result.length > 0){
